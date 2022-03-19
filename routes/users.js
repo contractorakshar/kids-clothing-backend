@@ -22,7 +22,7 @@ const upload = multer({ storage: storage })
 //get all users
 router.get('/all-users', (req, res) => {
   models.users.findAll({
-    attributes: ['email', 'name', 'city', 'address', 'mobile_no', 'profile_picture', 'user_type'],
+    attributes: ['email', 'name', 'city', 'address', 'mobile_no', 'profile_picture', 'user_type','country'],
     where: {
       is_deleted: 0
     }
@@ -46,7 +46,7 @@ router.get('/all-users', (req, res) => {
 //register user
 router.post('/register-user', upload.single('profile-picture'), (req, res) => {
   const userData = req.body;
-  userData.profile_picture = req.file.path;
+  userData.profile_picture = req.file.filename;
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(userData.password, salt);
 
