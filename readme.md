@@ -10,8 +10,8 @@ GET
 # register user
 POST
 --- http://localhost:3000/users/register-user
+FORM DATA
 
-{
     "email":"akshar@gmail.com",
     "name":"Akshar Contractor",
     "password":"akshar@123",
@@ -20,7 +20,12 @@ POST
     "address":"18-213 Darshan Appt, Nr Telephone Exchange, Narananpur 380013",
     "mobile_no":"+919104610020",
     "user_type":1
-}
+    profile_picturu :(url)
+    
+--- user_typt
+1 : admin
+0 : customer
+
 # Login Api
 POST
 --- http://localhost:3000/users/login

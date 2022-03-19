@@ -1,7 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
+var multer = require('multer');
+var jwt = require('jsonwebtoken');
 const { Op } = require('@sequelize/core');
+
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images/users')
+  },
+  filename: function (req, file, cb) {
+
+    const filename = Date.now();
+    cb(null, filename + '-' + file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage })
 
 //get all users
 router.get('/all-users', (req, res) => {
@@ -14,7 +30,7 @@ router.get('/all-users', (req, res) => {
     return res.status(200).send({
       success: true,
       error: false,
-      data: result,
+      result,
       msg: 'All Users'
     })
   }).catch((err) => {
@@ -28,9 +44,9 @@ router.get('/all-users', (req, res) => {
 });
 
 //register user
-router.post('/register-user', (req, res) => {
+router.post('/register-user', upload.single('profile-picture'), (req, res) => {
   const userData = req.body;
-
+  userData.profile_picture = req.file.path;
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(userData.password, salt);
 
@@ -49,7 +65,7 @@ router.post('/register-user', (req, res) => {
     return res.status(200).send({
       success: true,
       error: false,
-      data: result,
+      result,
       msg: 'User Successfully Registered'
     });
   }).catch((err) => {
@@ -83,14 +99,14 @@ router.post('/login', (req, res) => {
     }
   }).then((result) => {
     let flag = bcrypt.compareSync(userData.password, result.password);
-
     if (flag) {
-      // const token = jwt.sign({ username: result.username, first_name: result.first_name }, 'Akshar', { expiresIn: "24h" })
+      const token = jwt.sign({ name: result.name, email: result.email }, process.env.JWT_SECRET, { expiresIn: "24h" });
       delete result.dataValues.password;
       return res.status(200).send({
         success: true,
         error: false,
-        data: result,
+        result,
+        token,
         msg: "User Logged In Successfully ",
       });
     }

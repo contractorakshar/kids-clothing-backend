@@ -7,16 +7,19 @@ var logger = require('morgan');
 var connection = require('./db/db.config');
 var models = require('./models');
 var sequelize = require('sequelize');
+const dotenv = require('dotenv');
 
 global.con = connection;
 global.models = models;
 global.sequelize = sequelize;
+global.config = dotenv.config();
 
 var usersRouter = require('./routes/users');
 
 var app = express();
 
 // view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
