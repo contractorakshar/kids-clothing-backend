@@ -22,7 +22,7 @@ const upload = multer({ storage: storage })
 //get all users
 router.get('/all-users', (req, res) => {
   models.users.findAll({
-    attributes: ['email', 'name', 'city', 'address', 'mobile_no', 'profile_picture', 'user_type','country'],
+    attributes: ['email', 'name', 'city', 'address', 'mobile_no', 'profile_picture', 'user_type', 'country'],
     where: {
       is_deleted: 0
     }
@@ -44,9 +44,10 @@ router.get('/all-users', (req, res) => {
 });
 
 //register user
-router.post('/register-user', upload.single('profile-picture'), (req, res) => {
+router.post('/register-user', upload.single('profile_picture'), (req, res) => {
   const userData = req.body;
   userData.profile_picture = req.file.filename;
+
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(userData.password, salt);
 
@@ -126,6 +127,146 @@ router.post('/login', (req, res) => {
       msg: "Please Check Credentials"
     });
   });
-})
+});
+
+//update user 
+router.put('/update-user/:email', (req, res) => {
+
+  const userData = req.body;
+  const userEmail = req.params.email;
+
+  models.users.update({
+    email: userData.email,
+    name: userData.name,
+    country: userData.country,
+    city: userData.city,
+    address: userData.address,
+    mobile_no: userData.mobile_no
+  }, {
+    where: { email: userEmail }
+  }).then(result => {
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      msg: "User details Updated"
+    });
+  }).catch(err => {
+    return res.status(500).send({
+      success: false,
+      error: false,
+      err,
+      msg: "Error While Updating User Details"
+    });
+  })
+});
+
+//change password
+router.put('/change-password/:email', (req, res) => {
+
+  const userEmail = req.params.email;
+  const newPassword = req.body.password;
+  var salt = bcrypt.genSaltSync(10);
+  var hash = bcrypt.hashSync(newPassword, salt);
+
+  models.users.update({
+    password: hash
+  }, {
+    where: {
+      email: userEmail
+    }
+  }).then(result => {
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      msg: "Password Updated Successfully"
+    })
+  }).catch(err => {
+    return res.status(500).send({
+      success: false,
+      error: true,
+      err,
+      msg: "Error While Updating Password"
+    })
+  })
+});
+
+//change profile picture
+router.put('/profile-picture-update/:email', upload.single('profile_picture'), (req, res) => {
+
+  const userEmail = req.params.email;
+  const newProfilePicture = req.file.filename;
+
+  models.users.update({
+    profile_picture: newProfilePicture
+  }, {
+    where: {
+      email: userEmail
+    }
+  }).then(result => {
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      message: "User Profile Picture Updated"
+    })
+  }).catch(err => {
+    return res.status(500).send({
+      success: false,
+      error: true,
+      err,
+      message: "Error While Updating Profile Picture"
+    })
+  })
+});
+
+//soft delete user
+router.delete('/soft-delete/:email', (req, res) => {
+  const userEmail = req.params.email;
+  models.users.update({
+    is_deleted: 1,
+  }, {
+    where: { email: userEmail }
+  }).then(result => {
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      msg: "User Soft Deleted Success"
+    });
+  }).catch(err => {
+    return res.status(500).send({
+      success: false,
+      error: true,
+      err,
+      msg: "Error While deleting user"
+    });
+  });
+});
+
+//hard delete user
+router.delete('/hard-delete/:email', (req, res) => {
+  const userEmail = req.params.email;
+  models.users.destroy({
+    where: {
+      email: userEmail
+    }
+  }).then((result) => {
+    return res.send({
+      success: true,
+      error: false,
+      result,
+      msg: "User deleted"
+    });
+  }).catch((err) => {
+    return res.send({
+      success: false,
+      error: true,
+      err,
+      msg: "Error While Deleting User"
+    });
+  });
+});
 
 module.exports = router;

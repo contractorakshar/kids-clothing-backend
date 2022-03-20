@@ -38,3 +38,66 @@ POST
     "name":"Akshar Contractor",
     "password":"akshar@123"
 }
+# user soft delete
+DELETE
+
+http://localhost:3000/users/soft-delete/akshar@gmail.com
+
+{
+  "success": true,
+  "error": false,
+  "result": [
+    1
+  ],
+  "msg": "User Soft Deleted Success"
+}
+
+# user-hard delete
+DELETE
+
+http://localhost:3000/users/hard-delete/akshar@gmail.com
+
+{
+  "success": true,
+  "error": false,
+  "result": 1,
+  "msg": "User deleted"
+}
+
+# user update
+http://localhost:3000/users/update-user/akshar@gmail.com
+
+ PUT
+ {
+    "email":"akshar@gmail.com",
+    "name":"Akshar Contractor",
+    "country":"India",
+    "city":"Ahmedabad",
+    "address":"18-213 Darshan Appt, Nr Telephone Exchange, Narananpur 380013",
+    "mobile_no":"+919104610020",
+ }
+
+ # change password user
+ http://localhost:3000/users/change-password/akshar@gmail.com
+ PUT
+ {
+  "success": true,
+  "error": false,
+  "result": [
+    1
+  ],
+  "msg": "Password Updated Successfully"
+}
+
+# update profile picture
+http://localhost:3000/users/profile-picture-update/akshar@gmail.com
+
+PUT
+{
+  "success": true,
+  "error": false,
+  "result": [
+    1
+  ],
+  "message": "User Profile Picture Updated"
+}
