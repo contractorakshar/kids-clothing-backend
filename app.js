@@ -11,11 +11,12 @@ const dotenv = require('dotenv');
 
 global.con = connection;
 global.models = models;
-global.sequelize = sequelize;
+global.seq = sequelize;
 global.config = dotenv.config();
 
 var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
+var productsRouter = require('./routes/products');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 app.use('/category',categoryRouter);
+app.use('/products',productsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

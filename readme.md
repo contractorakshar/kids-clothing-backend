@@ -13,6 +13,7 @@ GET
 
 POST
 --- http://localhost:3000/users/register-user
+
 FORM DATA
 
     "email":"akshar@gmail.com",
@@ -25,7 +26,7 @@ FORM DATA
     "user_type":1
     profile_picturu :(url)
 
---- user_typt
+--- user_type
 1 : admin
 0 : customer
 
@@ -155,3 +156,21 @@ http://localhost:3000/category/hard-delete/1
   "result": 1,
   "message": "Category Successfully Deleted"
 }
+
+### PRODUCTS
+
+# get All products
+http://localhost:3000/products/all-products
+
+# get product by id
+http://localhost:3000/products/product-details/4
+
+# add product
+http://localhost:3000/products/add-product
+
+# soft delete product
+http://localhost:3000/products/delete-product-soft/4
+
+# get user by email
+
+# get category by id

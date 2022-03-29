@@ -17,6 +17,23 @@ router.get('/all-categories', (req, res) => {
     });
 });
 
+//get Category By Id
+router.get('/category-details/:id', (req, res) => {
+    let id = req.params.id;
+
+    models.category.findAll({
+        attributes: ['id', 'name'],
+        where: {
+            id,
+            is_deleted: 0
+        }
+    }).then(result => {
+        return successResponse(res, result, "Category Details");
+    }).catch(err => {
+        return errorResponse(res, err, "Error While Fetching Category Details")
+    });
+});
+
 //add Category
 router.post('/add-category', (req, res) => {
 

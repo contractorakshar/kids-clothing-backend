@@ -1,5 +1,5 @@
 successResponse = (res, result, msg) => {
-     res.status(200).send({
+    return res.status(200).send({
         success: true,
         error: false,
         result,
@@ -8,7 +8,7 @@ successResponse = (res, result, msg) => {
 }
 
 errorResponse = (res, err, msg) => {
-     res.status(500).send({
+    return res.status(500).send({
         success: false,
         error: true,
         err,

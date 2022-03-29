@@ -4,7 +4,7 @@ var bcrypt = require('bcryptjs');
 var multer = require('multer');
 var jwt = require('jsonwebtoken');
 const { Op } = require('@sequelize/core');
-
+const { successResponse, errorResponse } = require('../helpers/response.helper');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,7 +17,7 @@ var storage = multer.diskStorage({
   }
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
 //get all users
 router.get('/all-users', (req, res) => {
@@ -40,6 +40,23 @@ router.get('/all-users', (req, res) => {
       err,
       msg: "Failed to fetch users data"
     });
+  });
+});
+
+//get user details by email
+router.get('/user-details/:email', (req, res) => {
+  const email = req.params.email;
+
+  models.users.findOne({
+    attributes: ['email', 'name', 'city', 'address', 'mobile_no', 'profile_picture', 'user_type', 'country'],
+    where: {
+      email,
+      is_deleted: 0
+    }
+  }).then((result) => {
+    return successResponse(res, result, "User Details");
+  }).catch((err) => {
+    return errorResponse(res, err, "Failed to fetch User Details");
   });
 });
 
