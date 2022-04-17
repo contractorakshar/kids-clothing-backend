@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         name: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(100),
             allowNull: false
         },
         manufacturer: {
@@ -25,6 +25,10 @@ module.exports = function (sequelize, DataTypes) {
         },
         price: {
             type: DataTypes.DECIMAL(8, 2),
+            allowNull: false
+        },
+        quantity: {
+            type: DataTypes.INTEGER(11),
             allowNull: false
         },
         cover_image: {

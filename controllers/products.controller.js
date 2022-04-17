@@ -1,3 +1,4 @@
+const sequelize = require("sequelize");
 const { successResponse, errorResponse } = require("../helpers/response.helper");
 
 
@@ -6,7 +7,7 @@ const getAllProducts = (req, res) => {
     models.products.hasOne(models.category);
 
     models.products.findAll({
-        attributes: ['id', 'category_id', 'name', 'manufacturer', 'color', 'price', 'cover_image', 'description'],
+        attributes: ['id', 'category_id', 'name', 'manufacturer', 'color', 'price', 'cover_image', 'description','quantity'],
         include: {
             model: models.category,
             attributes: ['name', 'id'],
@@ -33,7 +34,7 @@ const getProductById = (req, res) => {
     models.products.hasOne(models.category);
 
     models.products.findOne({
-        attributes: ['id', 'category_id', 'name', 'manufacturer', 'color', 'price', 'cover_image', 'description'],
+        attributes: ['id', 'category_id', 'name', 'manufacturer', 'color', 'price', 'cover_image', 'description','quantity'],
         include: {
             model: models.category,
             attributes: ['name', 'id'],
@@ -58,7 +59,6 @@ const addProduct = (req, res) => {
 
     const productDetails = req.body;
     productDetails.cover_image = req.file.filename;
-
     models.products.create({
         category_id: productDetails.category_id,
         name: productDetails.name,
@@ -67,9 +67,12 @@ const addProduct = (req, res) => {
         price: productDetails.price,
         cover_image: productDetails.cover_image,
         description: productDetails.description,
+        quantity:productDetails.quantity,
     }).then((result) => {
+        console.log("🚀 ~ file: products.controller.js ~ line 75 ~ addProduct ~ result", result)
         return successResponse(res, result, "Product Details Added Successfully");
     }).catch((err) => {
+        console.log("🚀 ~ file: products.controller.js ~ line 75 ~ addProduct ~ err", err)
         return errorResponse(res, err, "Error While Adding Product Details!");
     });
 }
@@ -118,10 +121,10 @@ const updateProduct = (req, res) => {
         description: productDetails.description,
     }, {
         where: { id }
-    }).then(result=>{
-        successResponse(res,result,"Product Updated Successfully");
-    }).catch(err=>{
-        errorResponse(res,err,"Error While Updating Product");
+    }).then(result => {
+        successResponse(res, result, "Product Updated Successfully");
+    }).catch(err => {
+        errorResponse(res, err, "Error While Updating Product");
     })
 }
 
