@@ -128,11 +128,50 @@ const updateProduct = (req, res) => {
     })
 }
 
+
+const getAllProductsCount = (req, res) => {
+    models.products.count({
+        where: {
+            is_deleted: 0
+        },
+    }).then(result => {
+        return successResponse(res, result, "Products Count");
+    }).catch(err => {
+        return errorResponse(res, err, "Error While Fetching Products!");
+    })
+}
+
+const getAllProductsCategoryCount = (req, res) => {
+    models.category.belongsTo(models.products);
+    models.products.hasOne(models.category);
+
+    models.products.count({
+        include: {
+            model: models.category,
+            attributes: ['name', 'id'],
+            required: true,
+            on: [{
+                category_id: sequelize.where(sequelize.col('category.id'), '=', sequelize.col('products.category_id'))
+            }],
+        },
+        where: {
+            is_deleted: 0
+        },
+        group: ["category_id"],
+    }).then(result => {
+        return successResponse(res, result, "Category wise Products Count");
+    }).catch(err => {
+        return errorResponse(res, err, "Error While Fetching Products!");
+    })
+}
+
 module.exports = {
     getAllProducts,
     getProductById,
     addProduct,
     softDeleteProduct,
     hardDeleteProduct,
-    updateProduct
+    updateProduct,
+    getAllProductsCount,
+    getAllProductsCategoryCount
 }

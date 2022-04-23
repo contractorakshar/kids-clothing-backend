@@ -3,6 +3,7 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var multer = require('multer');
 var jwt = require('jsonwebtoken');
+const sequelize = require("sequelize");
 const { Op } = require('@sequelize/core');
 const { successResponse, errorResponse } = require('../helpers/response.helper');
 
@@ -285,5 +286,86 @@ router.delete('/hard-delete/:email', (req, res) => {
     });
   });
 });
+
+//all user count
+router.get('/all-users-count', (req, res) => {
+  models.users.count({
+    where: {
+      is_deleted: 0,
+      user_type: {
+        [sequelize.Op.not]: 1
+      }  
+    }
+    
+  }).then((result) => {
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      msg: 'User Count'
+    })
+  }).catch((err) => {
+    return res.status(500).send({
+      success: false,
+      error: true,
+      err,
+      msg: "Failed to fetch users data"
+    });
+  });
+});
+
+
+//recent five users
+router.get('/recent-users', (req, res) => {
+  models.users.findAll({
+    limit: 5,
+    where: {
+      is_deleted: 0,
+      user_type: {
+        [sequelize.Op.not]: 1
+      } 
+    },
+    order: [['created_at', 'DESC']]
+  }).then((result) => {
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      msg: 'Recent Five Users'
+    })
+  }).catch((err) => {
+    return res.status(500).send({
+      success: false,
+      error: true,
+      err,
+      msg: "Failed to fetch users data"
+    });
+  });
+});
+
+//recent five orders
+// router.get('/recent-order', (req, res) => {
+//   models.orders.findAll({
+//     limit: 5,
+//     where: {
+//       is_deleted: 0,
+//     },
+//     order: [['created_at', 'DESC']]
+//   }).then((result) => {
+//     return res.status(200).send({
+//       success: true,
+//       error: false,
+//       result,
+//       msg: 'Recent Five Orders'
+//     })
+//   }).catch((err) => {
+//     return res.status(500).send({
+//       success: false,
+//       error: true,
+//       err,
+//       msg: "Failed to fetch orders data"
+//     });
+//   });
+// });
 
 module.exports = router;

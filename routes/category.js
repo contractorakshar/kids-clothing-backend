@@ -96,4 +96,28 @@ router.delete('/hard-delete/:id', (req, res) => {
 
 });
 
+//all category count
+router.get('/all-category-count', (req, res) => {
+    models.category.count({
+      where: {
+        is_deleted: 0
+      }
+    }).then((result) => {
+      return res.status(200).send({
+        success: true,
+        error: false,
+        result,
+        msg: 'Category Count'
+      })
+    }).catch((err) => {
+      return res.status(500).send({
+        success: false,
+        error: true,
+        err,
+        msg: "Failed to fetch users data"
+      });
+    });
+  });
+
+
 module.exports = router;
