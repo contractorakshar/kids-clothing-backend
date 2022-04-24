@@ -28,4 +28,7 @@ router.delete('/delete-product-hard/:id', productsController.hardDeleteProduct)
 
 router.put('/update-product/:id', productsController.updateProduct);
 
+router.get('/related-products/:category',productsController.getRelatedProducts);
+
+router.get('/all-products-count', productsController.getAllProductsCount);
 module.exports = router;

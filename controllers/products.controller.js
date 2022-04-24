@@ -128,11 +128,29 @@ const updateProduct = (req, res) => {
     })
 }
 
+const getRelatedProducts=(req,res)=>{
+    const categoryName = req.params.category
+}
+
+const getAllProductsCount = (req, res) => {
+    models.products.count({
+        where: {
+            is_deleted: 0
+        },
+    }).then(result => {
+        return successResponse(res, result, "Products Count");
+    }).catch(err => {
+        return errorResponse(res, err, "Error While Fetching Products!");
+    })
+}
+
 module.exports = {
     getAllProducts,
     getProductById,
     addProduct,
     softDeleteProduct,
     hardDeleteProduct,
-    updateProduct
+    updateProduct,
+    getRelatedProducts,
+    getAllProductsCount
 }

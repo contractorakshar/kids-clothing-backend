@@ -18,6 +18,8 @@ var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
 var productsRouter = require('./routes/products');
 var productPhotosRouter = require('./routes/productsPhotos.routes');
+var orderRouter = require('./routes/order.routes');
+var orderDetailsRouter = require('./routes/orderDetails.routes');
 var app = express();
 
 // view engine setup
@@ -37,7 +39,8 @@ app.use('/users', usersRouter);
 app.use('/category',categoryRouter);
 app.use('/products',productsRouter);
 app.use('/product-photos',productPhotosRouter);
-
+app.use('/order',orderRouter);
+app.use('/order_details',orderDetailsRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

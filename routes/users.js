@@ -3,7 +3,8 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var multer = require('multer');
 var jwt = require('jsonwebtoken');
-const { Op } = require('@sequelize/core');
+const { Op, Sequelize } = require('@sequelize/core');
+// const sequelize = require("sequelize");
 const { successResponse, errorResponse } = require('../helpers/response.helper');
 
 var storage = multer.diskStorage({
@@ -282,6 +283,33 @@ router.delete('/hard-delete/:email', (req, res) => {
       error: true,
       err,
       msg: "Error While Deleting User"
+    });
+  });
+});
+
+router.get('/all-users-count', (req, res) => {
+  models.users.count({
+    where: {
+      is_deleted: 0,
+      user_type: {
+        [Sequelize.Op.not]: 1
+      }
+    }
+
+  }).then((result) => {
+    console.log("🚀 ~ file: users.js ~ line 299 ~ router.get ~ result", result)
+    return res.status(200).send({
+      success: true,
+      error: false,
+      result,
+      msg: 'User Count'
+    })
+  }).catch((err) => {
+    return res.status(500).send({
+      success: false,
+      error: true,
+      err,
+      msg: "Failed to fetch users data"
     });
   });
 });
