@@ -16,13 +16,13 @@ POST
 
 FORM DATA
 
-    "email":"akshar@gmail.com",
-    "name":"Akshar Contractor",
-    "password":"akshar@123",
-    "country":"India",
-    "city":"Ahmedabad",
-    "address":"18-213 Darshan Appt, Nr Telephone Exchange, Narananpur 380013",
-    "mobile_no":"+919104610020",
+    "email":"test@gmail.com",
+    "name":"test",
+    "password":"test@123",
+    "country":"test",
+    "city":"test",
+    "address":"test",
+    "mobile_no":"+1213211321",
     "user_type":1
     profile_picturu :(url)
 
@@ -35,13 +35,13 @@ FORM DATA
 POST
 --- http://localhost:3000/users/login
 {
-"email":"akshar@gmail.com",
-"password":"akshar@123"
+"email":"test@gmail.com",
+"password":"test@123"
 }
 
 {
-"name":"Akshar Contractor",
-"password":"akshar@123"
+"name":"test test",
+"password":"test@123"
 }
 
 # user soft delete
@@ -63,7 +63,7 @@ http://localhost:3000/users/soft-delete/akshar@gmail.com
 
 DELETE
 
-http://localhost:3000/users/hard-delete/akshar@gmail.com
+http://localhost:3000/users/hard-delete/test@gmail.com
 
 {
 "success": true,
@@ -74,21 +74,21 @@ http://localhost:3000/users/hard-delete/akshar@gmail.com
 
 # user update
 
-http://localhost:3000/users/update-user/akshar@gmail.com
+http://localhost:3000/users/update-user/test@gmail.com
 
 PUT
 {
-"email":"akshar@gmail.com",
-"name":"Akshar Contractor",
-"country":"India",
-"city":"Ahmedabad",
-"address":"18-213 Darshan Appt, Nr Telephone Exchange, Narananpur 380013",
-"mobile_no":"+919104610020",
+"email":"test@gmail.com",
+"name":"test test",
+"country":"test",
+"city":"test",
+"address":"test",
+"mobile_no":"+21312",
 }
 
 # change password user
 
-http://localhost:3000/users/change-password/akshar@gmail.com
+http://localhost:3000/users/change-password/test@gmail.com
 PUT
 {
 "success": true,
@@ -101,7 +101,7 @@ PUT
 
 # update profile picture
 
-http://localhost:3000/users/profile-picture-update/akshar@gmail.com
+http://localhost:3000/users/profile-picture-update/test@gmail.com
 
 PUT
 {
